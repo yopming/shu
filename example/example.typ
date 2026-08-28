@@ -2,11 +2,12 @@
 
 #show: template.with(
   title: [Example],
-  short_title: [],
+  subtitle: [Subtitle],
+  short_title: [Short Title],
   author: [Tieming Geng],
   email: "tgeng@uncfsu.edu",
-  course_no: [CSC 312],
-  course_name: [Cloud and Web Security],
+  abstract: [#lorem(50)],
+  date: [2020-11-01],
 )
 
 = Heading1
@@ -14,4 +15,4 @@
 === Heading 3
 
 
-#lorem(30)
+#lorem(530)

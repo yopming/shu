@@ -17,13 +17,15 @@
 
 
 #let template(
-  title_page: 0, // 0 means no page break after the title, otherwise 1
-	title: [],
+	title: [Title],
+  subtitle: [Subtitle],
   short_title: [],
-  author: [],
+  author: [authors],
   email: [],
-  course_no: [],
-  course_name: [],
+  abstract: [#lorem(20)],
+  logo_cover: image("./assets/fsu-alternative.jpg", width: 40%),
+  logo: image("./assets/fsu.jpg", width: 25%),
+  date: datetime.today().display(),
   doc,
 ) = {
 
@@ -69,57 +71,14 @@
   /**** Page ****/
   set page(
     paper: "us-letter", 
-    margin: (left: 20mm, right: 20mm, top: 30mm, bottom: 25mm),
+    margin: (x: 40mm, y: 30mm),
   )
 
   set page(
-    header: context{
-      set text(size: 9pt)
-      set text(top-edge: .4em)
-
-      // first page
-      if here().page() == 1 {
-        grid(
-          columns: (1fr, 3fr),
-          gutter: 5pt,
-          align(bottom, image("./assets/fsu.jpg", width: 25%)),
-          align(
-            right, 
-            text(
-              // font: font_family_heading, 
-              fill: color_fsu_blue,
-              // weight: "bold",
-              size: 6pt
-            )[#course_no \ #course_name]
-          )
-        )
-
-        line(length: 100%, stroke: 1pt + black)
-      }
-
+    footer: context{
       // starting from 2nd page
       if here().page() > 1 {
-        // use short_title if it is defined; use title otherwise
-        if short_title != none {
-          text(short_title)
-        } else {
-          text(title)
-        }
-
-        h(1fr)
-        text(course_no)
-
-        line(length: 100%, stroke: .4pt + black)
-      }
-    },
-    footer: context{
-      set text(size: 9pt)
-      if here().page() > 1 {
-        line(length: 100%, stroke: .4pt + black)
-
-        text(email)
-        h(1fr) // align right
-        text[#here().page()]
+        align(center, text[#here().page()])
       }
     }
   )
@@ -215,40 +174,43 @@
   }
 
   /**** Title Page ****/
-  // padding before title
-  if title_page == 1 {
-    v(10em)
-  }
-
   // title
-  {
-    set document(title: title)
-    set text(weight: "black", size: 16pt, font: font_family_heading, fill: color_fsu_blue)
+
+  v(2cm)
+  { 
+    set text(weight: "black", size: 16pt)
     block(title)
   }
-
-  // course name
-  if title_page == 1 {
-    set text(size: 12pt)
-    text(course_no)
-    h(5pt)
-    text(course_name)
-    v(1em)
-  }
-
-  // author email
+  v(0.5cm)
   {
     block(text(author))
-    block(text(email))
   }
-  v(1em)
+  v(3.5cm)
 
-  if title_page == 1 {
-    pagebreak()
-  } else {
-    line(length: 100%, stroke: 0.4pt + black)
-    v(1em)
+  // Main body
+  place(
+    float: true,
+    bottom,
+    {
+      set text(size: 7.5pt)
+      set par(first-line-indent: 0em)
+      line(length: 25%, stroke: 0.75pt)
+      set par(spacing: 1.5em)
+      email
+    }
+  )
+
+  if (abstract != none){
+    strong({
+      [Abstract]
+      h(0.25em)
+      sym.dash.em
+    })
+    h(weak: true, 0.25em)
+    abstract
   }
+
+  pagebreak()
 
   /**** doc ****/
   doc
