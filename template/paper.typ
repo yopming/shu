@@ -26,6 +26,7 @@
   logo_cover: image("./assets/fsu-alternative.jpg", width: 40%),
   logo: image("./assets/fsu.jpg", width: 25%),
   date: datetime.today().display(),
+  show_outline: true,
   doc,
 ) = {
 
@@ -211,6 +212,28 @@
   }
 
   pagebreak()
+
+
+  /**** Content Outline ****/
+  if show_outline {
+    outline(depth: 2) 
+    pagebreak()
+  }
+
+
+  /**** line number ****/
+  
+  set par.line(
+    numbering: n => text(size: 7pt, fill: gray)[#n],
+    number-margin: right,
+    number-align: left,
+    number-clearance: 60pt,
+    numbering-scope: "document",
+  )
+
+  show heading: set par.line(numbering: none)
+  show outline: set par.line(numbering: none)
+  
 
   /**** doc ****/
   doc
